@@ -47,7 +47,8 @@ class ListMoviesView(View):
             if form.is_valid():
                 query = form.cleaned_data.get('query')
                 queryset = self.model.objects.annotate(
-                    similarity=TrigramSimilarity('title_ru', query)
+                    similarity=TrigramSimilarity('title_ru', query) +
+                               TrigramSimilarity('title_en', query)
                 ).filter(
                     similarity__gte=0.1).order_by(
                     '-similarity').select_related('director')
@@ -61,7 +62,7 @@ class ListMoviesView(View):
         cached_queryset = cache.get(full_path, None)
         if cached_queryset is None:
             cache.set(full_path, queryset, timeout=5)
-            paginator = Paginator(queryset, 2)
+            paginator = Paginator(queryset, 10)
         else:
             paginator = Paginator(cached_queryset, 2)
         return render(
