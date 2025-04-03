@@ -1,0 +1,114 @@
+* {
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.body_list {
+    background-color: white;
+    width: 75%;
+    border-radius: 20px;
+    padding: 20px;
+    margin: auto;
+}
+
+.main {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    border: 1px solid #d1d3ce75;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 15px;
+}
+
+div.main:hover {
+  color: rgb(24,24,24);
+  border: 1px solid rgb(198,198,198);
+  background: #f7f7f7 linear-gradient(#f7f7f7, #f1f1f1);
+  box-shadow: 0 1px 2px rgba(0,0,0,.1);
+}
+
+/*.main_number_content {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*}*/
+
+.number_content {
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 180px;
+    height: 180px;
+    background-color: #d1d3ce75;
+    align-items: center;
+    justify-content: center;
+}
+
+.number_font {
+    font-size: 6rem;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+.content_font {
+    font-family: sans-serif;
+}
+
+.title_font {
+    font-size: 1.5rem;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+.poster {
+    display: flex;
+    border-radius: 20px;
+    width: 150px;
+    height: 180px;
+    object-fit: cover;
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    padding: 0px;
+    gap: 0.1px;
+    max-width: 700px; /* Максимальная ширина в пикселях */
+    overflow-wrap: break-word; /* Позволяет перенос длинных слов */
+}
+
+.trailer_button {
+    display: flex;
+    border-radius: 20px;
+    width: 75px;
+    height: 15%;
+    background-color: #d1d3ce75;
+    align-items: center;
+    justify-content: center;
+    transition: all .218s ease 0s;
+    border: 0px;
+}
+
+a.trailer_button:hover {
+  color: rgb(24,24,24);
+  border: 0px solid rgb(198,198,198);
+  background: #cfcfcf75 linear-gradient(#cfcfcf75, #cfcfcf75);
+  box-shadow: 0 1px 2px rgba(0,0,0,.1);
+}
+
+a.trailer_button:active {
+  color: rgb(51,51,51);
+  border: 0px solid rgb(204,204,204);
+  background: rgb(238,238,238) linear-gradient(rgb(238,238,238), rgb(224,224,224));
+  box-shadow: 0 1px 2px rgba(0,0,0,.1) inset;
+}
+
+.director {
+    margin-bottom: 8px;
+    max-width: 550px;
+}

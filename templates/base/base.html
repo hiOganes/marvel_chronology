@@ -1,0 +1,18 @@
+{% load static %}
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link type="text/css" href="{% static 'css/base.css' %}" rel="stylesheet" />
+    {% block list_movie_css %}{% endblock %}
+    {% block pagination_movie_css %}{% endblock %}
+    {% block create_movie_css %}{% endblock %}
+    {% block title %}{% endblock %}
+  </head>
+  <body>
+  <strong><h1 align="center">Хронология марвел</h1></strong>
+    {% block content %}{% endblock %}
+    {% block navigation %}{% endblock %}
+  </body>
+</html>

@@ -1,0 +1,9 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<h1>Автор добавлен</h1>
+<h2>
+    <div><a href="{% url 'directors-create' %}">Добавить ещё</a></div>
+    <div><a href="{% url 'movies-list' %}">Список фильмов</a></div>
+</h2>
+{% endblock %}

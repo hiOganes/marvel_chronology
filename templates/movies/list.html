@@ -1,0 +1,63 @@
+{% extends "base/base.html" %}
+{% load list_filters %}
+{% load static %}
+
+{% block title %}<title>Список фильмов</title>{% endblock %}
+{% block list_movie_css %}
+    <link type="text/css" href="{% static 'css/movies/list.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block pagination_movie_css %}
+    <link type="text/css" href="{% static 'css/movies/pagination.css' %}" rel="stylesheet" />
+    <link type="text/css" href="{% static 'css/common/search.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<div class="body_list">
+    <div>
+         <form class="search_main" method="get">
+                 <div><button class="search_button" type="submit">НАЙТИ</button></div>
+                 {% for f in form %}
+                     <div>{{ f }}</div>
+                 {% endfor %}
+         </form>
+    </div>
+    {% for movie in pages_movies %}
+        <div class="main">
+            <div class="number_content">
+                <div class="number_font">{{ movie.position }}</div>
+                <div class="content_font">{{ movie.content|translate_content }}</div>
+            </div>
+            <div>
+                <img src="{{ movie.poster.url }}" class="poster">
+            </div>
+            <div class="title">
+                <div class="title_font">{{ movie.title_ru }}</div>
+                <div>{{ movie.title_en }}</div>
+                <p class="director"><strong>Режиссёр:</strong> {{ movie.director }},
+                <strong>Релиз:</strong> {{ movie.release_date|date:"d.m.Y" }},
+                <strong>Длина:</strong> {{ movie.timing|timing_movie  }}
+                </p>
+                <div class="director">{{ movie.description|custom_truncatechars:200}}</div>
+                <a class="trailer_button" href="{{ movie.trailer }}" target="_blank">Трейлер</a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+{% block navigation %}
+    <div class="main_pagination">
+        {% if pages_movies.has_previous %}
+            <a href="?page={{ pages_movies.previous_page_number }}" class="pagination_number_font">&lt</a>
+        {% endif %}
+        {% for page in pages_movies.paginator.page_range %}
+                {% if pages_movies.number == page %}
+                    <div class="pagination_font">{{ page }}</div>
+                {% elif page >= pages_movies.number|add:-2 and page <= pages_movies.number|add:2 %}
+                    <a href="?page={{ page }}&query={{ query|urlencode }}" class="pagination_number_font">{{ page }}</a>
+                {% endif %}
+        {% endfor %}
+        {% if pages_movies.has_next %}
+            <a href="?page={{ pages_movies.next_page_number }}" class="pagination_number_font">&gt</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+.body_list {
+    background-color: white;
+    width: 40%;
+    border-radius: 20px;
+    padding: 20px;
+    margin: auto;
+}
+
+.main {
+    display: table;
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid #d1d3ce75;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 15px;
+}
+
+.form_example{
+    display: table-row;
+}
+
+label, input, select, textarea {
+    display: table-cell;
+    margin-bottom: 10px;
+}
+
+label {
+  padding-right: 10px;
+}
+
+textarea {
+  padding: 10px;
+  max-width: 80%;
+  line-height: 1;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 1px 1px 1px #999;
+}
