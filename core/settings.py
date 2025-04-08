@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'apps.directors.apps.DirectorsConfig',
     'apps.accounts.apps.AccountsConfig',
     # Third
-    'debug_toolbar'
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [

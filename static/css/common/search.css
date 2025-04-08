@@ -6,17 +6,18 @@
     border-radius: 20px;
     padding: 20px;
     margin: 15px;
+    align-items: center;
 }
 
 .search_form {
-    width: 820px;
-    height: 45px;
     border-radius: 20px;
     padding-inline: 20px;
     font-family: sans-serif;
     font-size: 1.3rem;
     background-color: #d1d3ce75;
     border: 0px;
+    width: 630px;
+    height: 45px;
 }
 
 .search_form:hover {
@@ -47,8 +48,6 @@
 .search_button {
     display: flex;
     border-radius: 20px;
-    width: 180px;
-    height: 45px;
     background-color: #d1d3ce75;
     align-items: center;
     justify-content: center;
@@ -56,18 +55,32 @@
     border: 0;
     font-family: sans-serif;
     font-size: 16px;
+    width: 180px;
+    height: 45px;
 }
 
-button.search_button:hover {
+.search_button:hover {
   color: rgb(24,24,24);
   border: 0px solid rgb(198,198,198);
   background: #cfcfcf75 linear-gradient(#cfcfcf75, #cfcfcf75);
   box-shadow: 0 1px 2px rgba(0,0,0,.1);
 }
 
-button.search_button:active {
+.search_button:active {
   color: rgb(51,51,51);
   border: 0px solid rgb(204,204,204);
   background: rgb(238,238,238) linear-gradient(rgb(238,238,238), rgb(224,224,224));
   box-shadow: 0 1px 2px rgba(0,0,0,.1) inset;
+}
+
+.tags {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+}
+
+.tags_place {
+    display: flex;
+    flex-direction: row;
 }

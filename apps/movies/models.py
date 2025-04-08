@@ -51,6 +51,7 @@ class Movies(models.Model):
     def __str__(self):
         return f'{self.title_ru}|{self.title_en}'
 
+    @property
     def get_absolute_url(self):
         return reverse('movies-detail', kwargs={'pk': self.pk})
 

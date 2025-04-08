@@ -19,9 +19,21 @@
                  {% for f in form %}
                      <div>{{ f }}</div>
                  {% endfor %}
+                 <div class="tags">
+                     <div class="tags_place">
+                         <a style="border-radius: 20px 5px 5px 0px;" class="filter_button" href="?query=мстители">мстители</a>
+                         <a style="border-radius: 5px 20px 0px 5px;" class="filter_button" href="?query=первый мститель">кэп</a>
+                     </div>
+                     <div class="tags_place">
+                         <a style="border-radius: 0px 5px 5px 20px;" class="filter_button" href="?query=железный человек">старк</a>
+                         <a style="border-radius: 5px 0px 20px 5px;" class="filter_button" href="?query=стражи галактики">стражи</a>
+                     </div>
+                 </div>
          </form>
     </div>
+
     {% for movie in pages_movies %}
+{#        <a class="main" href="{{ movie.get_absolute_url }}">#}
         <div class="main">
             <div class="number_content">
                 <div class="number_font">{{ movie.position }}</div>
@@ -37,11 +49,12 @@
                 <strong>Релиз:</strong> {{ movie.release_date|date:"d.m.Y" }},
                 <strong>Длина:</strong> {{ movie.timing|timing_movie  }}
                 </p>
-                <div class="director">{{ movie.description|custom_truncatechars:200}}</div>
+                <div class="director">{{ movie.description|custom_truncatechars:160}}</div>
                 <a class="trailer_button" href="{{ movie.trailer }}" target="_blank">Трейлер</a>
             </div>
         </div>
     {% endfor %}
+{#    </a>#}
 {% endblock %}
 {% block navigation %}
     <div class="main_pagination">

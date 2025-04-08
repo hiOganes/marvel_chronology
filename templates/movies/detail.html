@@ -1,0 +1,14 @@
+{% extends "base/base.html" %}
+{% load list_filters %}
+{% load static %}
+
+{% block detail_movie_css %}
+    <link type="text/css" href="{% static 'css/movies/detail.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+    <div class="main">
+        <div><img src="{{ movie.poster.url }}" class="poster"></div>
+        <div class="description_font">{{ movie.description }}</div>
+    </div>
+{% endblock %}

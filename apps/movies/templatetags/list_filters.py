@@ -26,3 +26,4 @@ def custom_truncatechars(value, arg):
 def translate_content(value):
     content = {'MOVIE': 'ФИЛЬМ', 'SERIAL': 'СЕРИАЛ'}
     return content[value]
+

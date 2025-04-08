@@ -9,10 +9,13 @@ a {
 
 .body_list {
     background-color: white;
-    width: 75%;
+    max-width: 1125px;
     border-radius: 20px;
     padding: 20px;
     margin: auto;
+    margin-top: 50px;
+    align-items: center;
+    font-family: sans-serif;
 }
 
 .main {
@@ -25,7 +28,7 @@ a {
     margin: 15px;
 }
 
-div.main:hover {
+.main:hover {
   color: rgb(24,24,24);
   border: 1px solid rgb(198,198,198);
   background: #f7f7f7 linear-gradient(#f7f7f7, #f1f1f1);
@@ -92,16 +95,17 @@ div.main:hover {
     justify-content: center;
     transition: all .218s ease 0s;
     border: 0px;
+    font-family: sans-serif;
 }
 
-a.trailer_button:hover {
+.trailer_button:hover {
   color: rgb(24,24,24);
   border: 0px solid rgb(198,198,198);
   background: #cfcfcf75 linear-gradient(#cfcfcf75, #cfcfcf75);
   box-shadow: 0 1px 2px rgba(0,0,0,.1);
 }
 
-a.trailer_button:active {
+.trailer_button:active {
   color: rgb(51,51,51);
   border: 0px solid rgb(204,204,204);
   background: rgb(238,238,238) linear-gradient(rgb(238,238,238), rgb(224,224,224));
@@ -111,4 +115,37 @@ a.trailer_button:active {
 .director {
     margin-bottom: 8px;
     max-width: 550px;
+}
+
+.filter_button {
+    display: flex;
+    border-radius: 20px;
+    width: 89px;
+    height: 22px;
+    background-color: #d1d3ce75;
+    align-items: center;
+    justify-content: center;
+    transition: all .218s ease 0s;
+    border: 0px;
+    margin-left: 1px;
+    font-family: sans-serif;
+}
+
+.filter_button:hover {
+  color: rgb(24,24,24);
+  border: 0px solid rgb(198,198,198);
+  background: #cfcfcf75 linear-gradient(#cfcfcf75, #cfcfcf75);
+  box-shadow: 0 1px 2px rgba(0,0,0,.1);
+}
+
+.filter_button:active {
+  color: rgb(51,51,51);
+  border: 0px solid rgb(204,204,204);
+  background: rgb(238,238,238) linear-gradient(rgb(238,238,238), rgb(224,224,224));
+  box-shadow: 0 1px 2px rgba(0,0,0,.1) inset;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
 }

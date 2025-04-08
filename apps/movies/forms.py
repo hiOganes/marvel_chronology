@@ -1,4 +1,5 @@
 from django import forms
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from apps.directors.models import Directors
 from apps.movies.models import Movies
