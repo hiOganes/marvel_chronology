@@ -68,15 +68,17 @@ class ListMoviesView(View):
             paginator = Paginator(queryset, 2)
         else:
             paginator = Paginator(cached_queryset, 2)
-        return render(
-            request,
-            self.template_name,
-            {
-                'pages_movies': paginator.get_page(request.GET.get('page')),
-                'form': self.form_class(),
-                'query': request.GET.get('query', ''),
-            }
-        )
+        data = {
+            'pages_movies': paginator.get_page(request.GET.get('page')),
+            'form': self.form_class(),
+            'query': request.GET.get('query', ''),
+            'buttons_crud': {
+                'Изменить': 'movies-update',
+                'Удалить': 'movies-delete'
+            },
+            'button_auth': {'Войти': 'login'},
+        }
+        return render(request, self.template_name, data)
 
 
 class DetailMoviesView(View):
@@ -121,3 +123,4 @@ class DeleteMoviesView(View):
         self.model.objects.get(pk=kwargs['pk']).delete()
         cache.clear()
         return redirect('movies-list')
+

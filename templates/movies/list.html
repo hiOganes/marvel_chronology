@@ -20,14 +20,11 @@
                      <div>{{ f }}</div>
                  {% endfor %}
                  <div class="tags">
-                     <div class="tags_place">
-                         <a style="border-radius: 20px 5px 5px 0px;" class="filter_button" href="?query=мстители">мстители</a>
-                         <a style="border-radius: 5px 20px 0px 5px;" class="filter_button" href="?query=первый мститель">кэп</a>
-                     </div>
-                     <div class="tags_place">
-                         <a style="border-radius: 0px 5px 5px 20px;" class="filter_button" href="?query=железный человек">старк</a>
-                         <a style="border-radius: 5px 0px 20px 5px;" class="filter_button" href="?query=стражи галактики">стражи</a>
-                     </div>
+                     {% if user.is_authenticated %}
+                         <a class="search_button" href="{% url 'custom-logout' %}">ВЫЙТИ</a>
+                     {% else %}
+                         <a class="search_button" href="{% url 'login' %}">ВОЙТИ</a>
+                     {% endif %}
                  </div>
          </form>
     </div>
@@ -50,7 +47,14 @@
                 <strong>Длина:</strong> {{ movie.timing|timing_movie  }}
                 </p>
                 <div class="director">{{ movie.description|custom_truncatechars:160}}</div>
-                <a class="trailer_button" href="{{ movie.trailer }}" target="_blank">Трейлер</a>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <a class="trailer_button" href="{{ movie.trailer }}" target="_blank">Трейлер</a>
+                    {% if user.is_superuser %}
+                        {% for name_button, name_url in buttons_crud.items %}
+                            <a class="trailer_button" href="{% url name_url movie.id %}" target="_blank">{{ name_button }}</a>
+                        {% endfor %}
+                    {% endif %}
+                </div>
             </div>
         </div>
     {% endfor %}
