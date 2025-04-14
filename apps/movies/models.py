@@ -51,10 +51,16 @@ class Movies(models.Model):
     def __str__(self):
         return f'{self.title_ru}|{self.title_en}'
 
-    @property
     def get_absolute_url(self):
         return reverse('movies-detail', kwargs={'pk': self.pk})
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.title_en)
+        if not self.pk:
+            self.slug = slugify(self.title_en)
+            if Movies.objects.filter(position=self.position).exists():
+                movies = Movies.objects.filter(position__gte=self.position)
+                if movies:
+                    for movie in movies.order_by('-position'):
+                        movie.position = movie.position + 1
+                        movie.save()
         super().save(*args, **kwargs)

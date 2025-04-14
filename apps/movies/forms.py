@@ -29,5 +29,7 @@ class SearchForm(forms.Form):
     query = forms.CharField(
         label='Поиск',
         required=False,
-        widget=forms.TextInput(attrs={"class":"search_form"})
+        widget=forms.TextInput(
+            attrs={"class":"search_form", 'placeholder': 'Название фильма'},
+        ),
     )

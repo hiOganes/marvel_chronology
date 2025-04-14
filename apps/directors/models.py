@@ -8,6 +8,9 @@ class Directors(models.Model):
     last_name = models.CharField()
     slug = models.SlugField(unique=True)
 
+    class Meta:
+        verbose_name_plural = 'Режиссёры'
+
     def save(self, *args, **kwargs):
         self.slug = slugify(unidecode(self.full_name))
         super().save(*args, **kwargs)

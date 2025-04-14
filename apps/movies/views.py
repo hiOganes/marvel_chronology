@@ -8,15 +8,18 @@ from django.contrib.postgres.search import (
 from django.contrib.postgres.search import TrigramSimilarity
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.db.models import F
 
 from apps.movies.models import Movies
 from apps.movies.forms import MoviesForm, SearchForm
 
 
-class CreateMoviesView(View):
+class CreateMoviesView(PermissionRequiredMixin, View):
     template_name = 'movies/create.html'
     model = Movies
     form_class = MoviesForm
+    permission_required = "movies.add_movies"
 
     def get(self, request):
         return render(request, self.template_name, {'form': self.form_class()})
@@ -30,8 +33,9 @@ class CreateMoviesView(View):
         return render(request, self.template_name, {'form': form})
 
 
-class CreatedMoviesView(View):
+class CreatedMoviesView(PermissionRequiredMixin, View):
     template_name = 'movies/created.html'
+    permission_required = "movies.add_movies"
 
     def get(self, request):
         return render(request, self.template_name)
@@ -90,10 +94,11 @@ class DetailMoviesView(View):
         return render(request, self.template_name, {'movie': movie})
 
 
-class UpdateMoviesView(View):
+class UpdateMoviesView(PermissionRequiredMixin, View):
     template_name = 'movies/update.html'
     model = Movies
     form_class = MoviesForm
+    permission_required = "movies.change_movies"
 
     def get(self, request, *args, **kwargs):
         movie = get_object_or_404(self.model, pk=kwargs['pk'])
@@ -116,11 +121,20 @@ class UpdateMoviesView(View):
         return render(request, self.template_name, {'form': form})
 
 
-class DeleteMoviesView(View):
+class DeleteMoviesView(PermissionRequiredMixin, View):
     model = Movies
+    permission_required = "movies.delete_movies"
 
     def get(self, request, *args, **kwargs):
-        self.model.objects.get(pk=kwargs['pk']).delete()
+        movie_to_delete = self.model.objects.get(pk=kwargs['pk'])
+        movies = self.model.objects.filter(
+            position__gt=movie_to_delete.position,
+        )
+        movie_to_delete.delete()
+        if movies and movie_to_delete.position > 0:
+            for movie in movies:
+                movie.position = movie.position - 1
+                movie.save()
         cache.clear()
         return redirect('movies-list')
 
