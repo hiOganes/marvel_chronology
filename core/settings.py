@@ -43,6 +43,13 @@ INSTALLED_APPS = [
     'apps.movies.apps.MoviesConfig',
     'apps.directors.apps.DirectorsConfig',
     'apps.accounts.apps.AccountsConfig',
+    # Api apps
+    'api.movies_v1.apps.MoviesConfig',
+    'api.directors_v1.apps.DirectorsConfig',
+    'api.accounts_v1.apps.AccountsConfig',
+    # Api
+    'rest_framework',
+    'drf_spectacular',
     # Third
     'debug_toolbar',
 ]
@@ -175,3 +182,17 @@ EMAIL_ADMIN = EMAIL_HOST_USER
 
 SITE_ID = 1
 
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Marvel Chronology',
+    'DESCRIPTION': 'A site for watching Marvel movies in a specific order',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}

@@ -21,6 +21,9 @@ from django.conf.urls.static import static
 from django.conf import settings
 from debug_toolbar.toolbar import debug_toolbar_urls
 from django.contrib.sitemaps.views import sitemap
+from drf_spectacular.views import (
+    SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+)
 
 from apps.movies.sitemaps import MoviesSitemap
 
@@ -40,6 +43,20 @@ urlpatterns = [
         sitemap,
         {'sitemaps': sitemaps},
         name='django.contrib.sitemaps.views.sitemap'
+    ),
+    path('api/movies_v1/', include('api.movies_v1.urls')),
+    path('api/directors_v1/', include('api.directors_v1.urls')),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    # Optional UI:
+    path(
+        'api/schema/swagger-ui/',
+        SpectacularSwaggerView.as_view(url_name='schema'),
+        name='swagger-ui'
+    ),
+    path(
+        'api/schema/redoc/',
+        SpectacularRedocView.as_view(url_name='schema'),
+        name='redoc'
     ),
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT

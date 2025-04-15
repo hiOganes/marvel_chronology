@@ -137,4 +137,3 @@ class DeleteMoviesView(PermissionRequiredMixin, View):
                 movie.save()
         cache.clear()
         return redirect('movies-list')
-
