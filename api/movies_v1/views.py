@@ -1,19 +1,19 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from drf_spectacular.utils import extend_schema, OpenApiParameter
-from api.movies_v1.paginations import ListMoviesPagination
-from rest_framework import filters
+from drf_spectacular.utils import extend_schema
 from django.contrib.postgres.search import TrigramSimilarity
 from django.core.cache import cache
-
+from django.shortcuts import get_object_or_404
 
 from apps.movies.models import Movies
 from api.movies_v1.serializers import MoviesSerializer
 from api.movies_v1 import schema_examples
+from api.movies_v1.paginations import ListMoviesPagination
 
 
 tags = ['Movies']
+
 
 class ListMoviesAPIView(APIView):
     model = Movies
@@ -61,17 +61,79 @@ class ListMoviesAPIView(APIView):
         summary='This endpoint create a new movie.',
         description=schema_examples.POST_LIST_MOVIES_DESCRIPTION,
         tags=tags,
+        responses=schema_examples.POST_LIST_MOVIES_STATUS_RESPONSES,
+        examples=schema_examples.POST_LIST_MOVIES_EXAMPLES_RESPONSE,
     )
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(request.data)
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             movie = self.model.objects.create(**serializer.validated_data)
-            serializer = serializer_class(movie)
+            serializer = self.serializer_class(movie)
             return Response(
                 data=serializer.data,
                 status=status.HTTP_201_CREATED
             )
+        cache.clear()
         return Response(
             data=serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+class DetailMoviesAPIView(APIView):
+    model = Movies
+    serializer_class = MoviesSerializer
+
+    def get_object(self, *args, **kwargs):
+        return get_object_or_404(self.model, pk=kwargs['pk'])
+
+    @extend_schema(
+        summary='This endpoint return movie.',
+        description=schema_examples.GET_DETAIL_MOVIES_DESCRIPTION,
+        tags=tags,
+        responses=schema_examples.GET_DETAIL_MOVIES_STATUS_RESPONSES,
+        examples=schema_examples.GET_DETAIL_MOVIES_EXAMPLES,
+    )
+    def get(self, request, *args, **kwargs):
+        movie = self.get_object(*args, **kwargs)
+        serializer = self.serializer_class(movie)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(
+        summary='This endpoint update movie.',
+        description=schema_examples.PUT_DETAIL_MOVIES_DESCRIPTION,
+        tags=tags,
+        responses=schema_examples.PUT_DETAIL_MOVIES_STATUS_RESPONSES,
+        examples=schema_examples.PUT_DETAIL_MOVIES_EXAMPLES,
+    )
+    def put(self, request, *args, **kwargs):
+        movie = self.get_object(*args, **kwargs)
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            for key, value in serializer.validated_data.items():
+                if getattr(movie, key) != value:
+                    setattr(movie, key, value)
+            movie.save()
+            serializer = self.serializer_class(movie)
+            cache.clear()
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        return Response(
+            data=serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    @extend_schema(
+        summary='This endpoint delete movie.',
+        description=schema_examples.DELETE_DETAIL_MOVIES_DESCRIPTION,
+        tags=tags,
+        responses=schema_examples.DELETE_DETAIL_MOVIES_STATUS_RESPONSES,
+        examples=schema_examples.DELETE_DETAIL_MOVIES_EXAMPLES,
+    )
+    def delete(self, request, *args, **kwargs):
+        movie = self.get_object(*args, **kwargs)
+        movie.delete()
+        cache.clear()
+        return Response(
+            data={'result': 'The movie has been removed.'},
+            status=status.HTTP_200_OK
         )

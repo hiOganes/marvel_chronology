@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 from django.core.cache import cache
+from django.utils import timezone
 
 from apps.directors.models import Directors
 
@@ -14,7 +15,7 @@ class Movies(models.Model):
     position = models.IntegerField(verbose_name='Позиция', unique=True, )
     title_ru = models.CharField(verbose_name='Название на русском', )
     title_en = models.CharField(verbose_name='Название на английском', )
-    release_date = models.DateTimeField(verbose_name='Дата выхода', )
+    release_date = models.DateField(verbose_name='Дата выхода', )
     timing = models.IntegerField(verbose_name='Длительность', )
     director = models.ForeignKey(
         Directors,
@@ -56,7 +57,7 @@ class Movies(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.slug = slugify(self.title_en)
+            self.slug = slugify(self.title_en + str(timezone.now().microsecond))
             if Movies.objects.filter(position=self.position).exists():
                 movies = Movies.objects.filter(position__gte=self.position)
                 if movies:

@@ -4,4 +4,9 @@ from api.movies_v1 import views
 
 urlpatterns = [
     path('list/', views.ListMoviesAPIView.as_view(), name='api-movies-list'),
+    path(
+        'detail/<slug:pk>/',
+        views.DetailMoviesAPIView.as_view(),
+        name='api-movies-detail'
+    ),
 ]

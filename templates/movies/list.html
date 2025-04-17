@@ -15,16 +15,16 @@
 <div class="body_list">
     <div>
          <form class="search_main" method="get">
-                 <div><button class="search_button" type="submit">НАЙТИ</button></div>
+                 {% if user.is_authenticated %}
+                     <a class="search_button" href="{% url 'custom-logout' %}">ВЫЙТИ</a>
+                 {% else %}
+                     <a class="search_button" href="{% url 'login' %}">ВОЙТИ</a>
+                 {% endif %}
                  {% for f in form %}
                      <div>{{ f }}</div>
                  {% endfor %}
                  <div class="tags">
-                     {% if user.is_authenticated %}
-                         <a class="search_button" href="{% url 'custom-logout' %}">ВЫЙТИ</a>
-                     {% else %}
-                         <a class="search_button" href="{% url 'login' %}">ВОЙТИ</a>
-                     {% endif %}
+                     <div><button class="search_button" type="submit">НАЙТИ</button></div>
                  </div>
          </form>
     </div>
@@ -51,7 +51,7 @@
                     <a class="trailer_button" href="{{ movie.trailer }}" target="_blank">Трейлер</a>
                     {% if user.is_superuser %}
                         {% for name_button, name_url in buttons_crud.items %}
-                            <a class="trailer_button" href="{% url name_url movie.id %}" target="_blank">{{ name_button }}</a>
+                            <a class="trailer_button" href="{% url name_url movie.id %}">{{ name_button }}</a>
                         {% endfor %}
                     {% endif %}
                 </div>

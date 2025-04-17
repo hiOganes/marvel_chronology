@@ -9,7 +9,7 @@ class MoviesForm(forms.Form):
     position = forms.IntegerField(label='Позиция')
     title_ru = forms.CharField(label='Название на русском языке')
     title_en = forms.CharField(label='Название на английском языке')
-    release_date = forms.DateTimeField(
+    release_date = forms.DateField(
         label='Дата выхода',
         widget=forms.DateInput(format='%d-%m-%Y', attrs={'type': 'date'}),
     )
