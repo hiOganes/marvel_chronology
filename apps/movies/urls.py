@@ -21,4 +21,5 @@ urlpatterns = [
         views.DeleteMoviesView.as_view(),
         name='movies-delete'
     ),
+    path('viewed/<slug:pk>/', views.ViewedView.as_view(), name='movies-viewed'),
 ]

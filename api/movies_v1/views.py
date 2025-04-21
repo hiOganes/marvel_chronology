@@ -5,11 +5,13 @@ from drf_spectacular.utils import extend_schema
 from django.contrib.postgres.search import TrigramSimilarity
 from django.core.cache import cache
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from apps.movies.models import Movies
-from api.movies_v1.serializers import MoviesSerializer
+from api.movies_v1.serializers import MoviesSerializer, ViewedAPIView
 from api.movies_v1 import schema_examples
 from api.movies_v1.paginations import ListMoviesPagination
+from api.movies_v1.permissions import MoviesPermission
 
 
 tags = ['Movies']
@@ -19,6 +21,7 @@ class ListMoviesAPIView(APIView):
     model = Movies
     serializer_class = MoviesSerializer
     pagination_class = ListMoviesPagination
+    permission_classes = [MoviesPermission]
 
     def get_objects(self, search=None):
         if search:
@@ -83,6 +86,7 @@ class ListMoviesAPIView(APIView):
 class DetailMoviesAPIView(APIView):
     model = Movies
     serializer_class = MoviesSerializer
+    permission_classes = [MoviesPermission]
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(self.model, pk=kwargs['pk'])
@@ -136,4 +140,30 @@ class DetailMoviesAPIView(APIView):
         return Response(
             data={'result': 'The movie has been removed.'},
             status=status.HTTP_200_OK
+        )
+
+
+class ViewedAPIView(APIView):
+    model = Movies
+    serializer_class = ViewedAPIView
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        summary='This endpoint changes the movie viewing status',
+        tags=tags,
+    )
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            movie = self.model.objects.get(pk=serializer.validated_data['id'])
+            try:
+                request.user.viewed.get(id=movie.id)
+                request.user.viewed.remove(movie)
+                return Response(data='Movie removed')
+            except self.model.DoesNotExist:
+                movie.user_set.add(request.user)
+            return Response(data='Movie status is changed')
+        return Response(
+            data=serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
         )

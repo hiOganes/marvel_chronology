@@ -27,15 +27,39 @@
                      <div><button class="search_button" type="submit">НАЙТИ</button></div>
                  </div>
          </form>
+         <div class="line_main" >
+                 <a class="line_button" href="{% url 'custom-logout' %}">ОТМЕТИТЬ ВСЕ</a>
+                 {% for _ in range) %}
+                      <div class="number_content_green"></div>
+                 {% endfor %}
+                 <div class="tags">
+                     <div><button class="line_button" type="submit">СБРОСИТЬ ВСЕ</button></div>
+         </div>
     </div>
 
     {% for movie in pages_movies %}
 {#        <a class="main" href="{{ movie.get_absolute_url }}">#}
         <div class="main">
-            <div class="number_content">
-                <div class="number_font">{{ movie.position }}</div>
-                <div class="content_font">{{ movie.content|translate_content }}</div>
-            </div>
+            {% if user.is_authenticated %}
+                 <a href="{% url 'movies-viewed' movie.id %}?page={{ request.get_full_path }}">
+                     {% if movie in viewed_movies %}
+                         <div class="number_content_green">
+                             <div class="number_font_white">{{ movie.position }}</div>
+                             <div class="content_font_white">{{ movie.content|translate_content }}</div>
+                         </div>
+                     {% else %}
+                         <div class="number_content">
+                             <div class="number_font">{{ movie.position }}</div>
+                             <div class="content_font">{{ movie.content|translate_content }}</div>
+                         </div>
+                     {% endif %}
+                 </a>
+            {% else %}
+                <div class="number_content">
+                         <div class="number_font">{{ movie.position }}</div>
+                         <div class="content_font">{{ movie.content|translate_content }}</div>
+                </div>
+            {% endif %}
             <div>
                 <img src="{{ movie.poster.url }}" class="poster">
             </div>

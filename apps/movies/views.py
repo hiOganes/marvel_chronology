@@ -12,7 +12,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import F
 
 from apps.movies.models import Movies
-from apps.movies.forms import MoviesForm, SearchForm
+from apps.movies.forms import MoviesForm, SearchForm, ViewedForm
 
 
 class CreateMoviesView(PermissionRequiredMixin, View):
@@ -67,11 +67,13 @@ class ListMoviesView(View):
         full_path = request.get_full_path()
         queryset = self.get_objects(request.GET.get('query', None))
         cached_queryset = cache.get(full_path, None)
+        viewed_movies = request.user.viewed.all()
         if cached_queryset is None:
             cache.set(full_path, queryset, timeout=5)
-            paginator = Paginator(queryset, 2)
+            paginator = Paginator(queryset, 10)
         else:
-            paginator = Paginator(cached_queryset, 2)
+            paginator = Paginator(cached_queryset, 10)
+
         data = {
             'pages_movies': paginator.get_page(request.GET.get('page')),
             'form': self.form_class(),
@@ -81,6 +83,7 @@ class ListMoviesView(View):
                 'Удалить': 'movies-delete'
             },
             'button_auth': {'Войти': 'login'},
+            'viewed_movies': viewed_movies
         }
         return render(request, self.template_name, data)
 
@@ -137,3 +140,19 @@ class DeleteMoviesView(PermissionRequiredMixin, View):
                 movie.save()
         cache.clear()
         return redirect('movies-list')
+
+
+class ViewedView(View):
+    model = Movies
+    form_class = ViewedForm
+
+    def get(self, request, *args, **kwargs):
+        full_path = request.get_full_path()
+        movie = self.model.objects.get(pk=kwargs['pk'])
+        try:
+            request.user.viewed.get(id=movie.id)
+            request.user.viewed.remove(movie)
+        except self.model.DoesNotExist:
+            movie.user_set.add(request.user)
+        finally:
+            return redirect(request.GET.get('page', '/'))

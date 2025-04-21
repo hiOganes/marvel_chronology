@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     # Api
     'rest_framework',
     'drf_spectacular',
+    # Auth
+    'rest_framework_simplejwt',
     # Third
     'debug_toolbar',
 ]
@@ -183,10 +185,16 @@ EMAIL_ADMIN = EMAIL_HOST_USER
 SITE_ID = 1
 
 REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+       'rest_framework.permissions.AllowAny',
+    ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny",
     ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
 }
 
 SPECTACULAR_SETTINGS = {

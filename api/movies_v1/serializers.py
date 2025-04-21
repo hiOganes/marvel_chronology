@@ -18,3 +18,7 @@ class MoviesSerializer(serializers.Serializer):
     description = serializers.CharField()
     poster = serializers.ImageField()
     content = serializers.ChoiceField(choices=Movies.MediaContent.choices)
+
+
+class ViewedAPIView(serializers.Serializer):
+    id = serializers.CharField()

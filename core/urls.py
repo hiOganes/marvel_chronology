@@ -24,8 +24,12 @@ from django.contrib.sitemaps.views import sitemap
 from drf_spectacular.views import (
     SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 )
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView, TokenRefreshView, TokenVerifyView,
+)
 
 from apps.movies.sitemaps import MoviesSitemap
+from api.accounts_v1 import views
 
 
 sitemaps = {
@@ -46,6 +50,7 @@ urlpatterns = [
     ),
     path('api/movies_v1/', include('api.movies_v1.urls')),
     path('api/directors_v1/', include('api.directors_v1.urls')),
+    path('api/accounts_v1/', include('api.accounts_v1.urls')),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     # Optional UI:
     path(
@@ -57,6 +62,17 @@ urlpatterns = [
         'api/schema/redoc/',
         SpectacularRedocView.as_view(url_name='schema'),
         name='redoc'
+    ),
+    # Auth
+    path(
+        'api/token/',
+        views.CustomTokenObtainPairView.as_view(),
+        name='token_obtain_pair'
+    ),
+    path(
+        'api/token/refresh/',
+        views.CustomTokenRefreshView.as_view(),
+        name='token_refresh'
     ),
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT

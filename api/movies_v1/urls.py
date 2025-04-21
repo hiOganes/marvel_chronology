@@ -9,4 +9,5 @@ urlpatterns = [
         views.DetailMoviesAPIView.as_view(),
         name='api-movies-detail'
     ),
+    path('viewed/', views.ViewedAPIView.as_view(), name='api-viewed-status')
 ]

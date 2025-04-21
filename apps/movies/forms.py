@@ -33,3 +33,7 @@ class SearchForm(forms.Form):
             attrs={"class":"search_form", 'placeholder': 'Название фильма'},
         ),
     )
+
+
+class ViewedForm(forms.Form):
+    id = forms.IntegerField()
