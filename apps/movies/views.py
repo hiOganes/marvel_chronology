@@ -67,13 +67,17 @@ class ListMoviesView(View):
         full_path = request.get_full_path()
         queryset = self.get_objects(request.GET.get('query', None))
         cached_queryset = cache.get(full_path, None)
-        viewed_movies = request.user.viewed.all()
+        if request.user.is_authenticated:
+            viewed_movies = request.user.viewed.all()
+            viewed_movies_count = len(viewed_movies)
+        else:
+            viewed_movies = None
+            viewed_movies_count = 0
         if cached_queryset is None:
             cache.set(full_path, queryset, timeout=5)
             paginator = Paginator(queryset, 10)
         else:
             paginator = Paginator(cached_queryset, 10)
-
         data = {
             'pages_movies': paginator.get_page(request.GET.get('page')),
             'form': self.form_class(),
@@ -83,7 +87,8 @@ class ListMoviesView(View):
                 'Удалить': 'movies-delete'
             },
             'button_auth': {'Войти': 'login'},
-            'viewed_movies': viewed_movies
+            'viewed_movies': viewed_movies,
+            'viewed_movies_count': viewed_movies_count
         }
         return render(request, self.template_name, data)
 
@@ -155,4 +160,21 @@ class ViewedView(View):
         except self.model.DoesNotExist:
             movie.user_set.add(request.user)
         finally:
+            previous_page = request.META.get('HTTP_REFERER')
+            if previous_page:
+                print(previous_page)
+                return redirect(previous_page)
             return redirect(request.GET.get('page', '/'))
+
+
+class DeleteOrCreateViewedView(View):
+    model = Movies
+
+    def get(self, request, *args, **kwargs):
+        viewed_movies = request.user.viewed.all()
+        if viewed_movies:
+            request.user.viewed.clear()
+        else:
+            movies = self.model.objects.all()
+            request.user.viewed.set(movies)
+        return redirect('movies-list')

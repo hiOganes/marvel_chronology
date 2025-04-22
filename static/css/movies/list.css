@@ -55,7 +55,6 @@ a {
 .line_main {
     display: flex;
     flex-direction: row;
-    gap: 10px;
     border: 1px solid #d1d3ce75;
     border-radius: 20px;
     padding: 20px;
@@ -63,7 +62,7 @@ a {
     align-items: center;
 }
 
-.line_button {
+.line_button_left {
     display: flex;
     border-radius: 20px;
     background-color: #d1d3ce75;
@@ -74,17 +73,49 @@ a {
     font-family: sans-serif;
     font-size: 16px;
     width: 180px;
-    height: 45px;
+    height: 25px;
+    margin-right: 10px;
+    font-size: smaller;
 }
 
-.line_button:hover {
+.line_button_left:hover {
   color: rgb(24,24,24);
   border: 0px solid rgb(198,198,198);
   background: #cfcfcf75 linear-gradient(#cfcfcf75, #cfcfcf75);
   box-shadow: 0 1px 2px rgba(0,0,0,.1);
 }
 
-.line_button:active {
+.line_button_left:active {
+  color: rgb(51,51,51);
+  border: 0px solid rgb(204,204,204);
+  background: rgb(238,238,238) linear-gradient(rgb(238,238,238), rgb(224,224,224));
+  box-shadow: 0 1px 2px rgba(0,0,0,.1) inset;
+}
+
+.line_button_right {
+    display: flex;
+    border-radius: 20px;
+    background-color: #d1d3ce75;
+    align-items: center;
+    justify-content: center;
+    transition: all .218s ease 0s;
+    border: 0;
+    font-family: sans-serif;
+    font-size: 16px;
+    width: 180px;
+    height: 25px;
+    margin-left: 10px;
+    font-size: smaller;
+}
+
+.line_button_right:hover {
+  color: rgb(24,24,24);
+  border: 0px solid rgb(198,198,198);
+  background: #cfcfcf75 linear-gradient(#cfcfcf75, #cfcfcf75);
+  box-shadow: 0 1px 2px rgba(0,0,0,.1);
+}
+
+.line_button_right:active {
   color: rgb(51,51,51);
   border: 0px solid rgb(204,204,204);
   background: rgb(238,238,238) linear-gradient(rgb(238,238,238), rgb(224,224,224));
@@ -103,6 +134,26 @@ a {
     flex-direction: column;
     width: 180px;
     height: 180px;
+    background-color: #1cca20;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.selected_cell {
+    display: flex;
+    flex-direction: column;
+    height: 25px;
+    background-color: #d1d3ce75;
+    align-items: center;
+    justify-content: center;
+}
+
+.selected_cell_green {
+    display: flex;
+    flex-direction: column;
+    width: 25px;
+    height: 25px;
     background-color: #1cca20;
     align-items: center;
     justify-content: center;

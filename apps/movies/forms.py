@@ -30,7 +30,7 @@ class SearchForm(forms.Form):
         label='Поиск',
         required=False,
         widget=forms.TextInput(
-            attrs={"class":"search_form", 'placeholder': 'Название фильма'},
+            attrs={"class":"search_form", 'placeholder': 'Хронология "MARVEL"'},
         ),
     )
 

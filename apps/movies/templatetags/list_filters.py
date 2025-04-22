@@ -23,7 +23,15 @@ def custom_truncatechars(value, arg):
 
 
 @register.filter
+def custom_range(value):
+    return range(value)
+
+@register.filter
 def translate_content(value):
     content = {'MOVIE': 'ФИЛЬМ', 'SERIAL': 'СЕРИАЛ'}
     return content[value]
 
+
+@register.filter
+def start_position(value):
+    return value % 10 in [1, 2]
