@@ -88,7 +88,8 @@ class ListMoviesView(View):
             },
             'button_auth': {'Войти': 'login'},
             'viewed_movies': viewed_movies,
-            'viewed_movies_count': viewed_movies_count
+            'viewed_movies_count': viewed_movies_count,
+            'all_movies_count': self.model.objects.count
         }
         return render(request, self.template_name, data)
 

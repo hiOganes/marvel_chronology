@@ -1,6 +1,9 @@
 from django import forms
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 
 from apps.accounts.models import User
+from apps.accounts.utils import check_password
 
 
 class UserForm(forms.ModelForm):
@@ -20,9 +23,20 @@ class UserForm(forms.ModelForm):
     def clean_email(self):
         # Check email for uniqueness
         email = self.cleaned_data['email']
-        if User.objects.filter(email=email).exists():
+        if get_user_model().objects.filter(email=email).exists():
             raise forms.ValidationError("Такой E-mail уже существует!")
         return email
+
+    def clean_password1(self):
+        password1 = self.cleaned_data.get('password1')
+        if len(password1) < 8:
+            raise ValidationError("Пароль короче 8 символов!")
+        if not check_password(password1):
+            raise ValidationError(
+                "Пароль должен состоять латинских из букв и цифр"
+            )
+        return password1
+
 
     def clean_password2(self):
         # Check that the two password entries match
