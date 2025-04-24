@@ -19,7 +19,11 @@ class MoviesForm(forms.Form):
         label='Режиссёр',
         empty_label="Выберите режиссёра"
     )
-    trailer = forms.URLField(label='Ссылка на трейлер', widget=forms.URLInput)
+    trailer = forms.URLField(
+        label='Ссылка на трейлер',
+        widget=forms.URLInput,
+        assume_scheme='http'
+    )
     description = forms.CharField(label='Описание', widget=forms.Textarea)
     poster = forms.ImageField(label='Постер')
     content = forms.ChoiceField(label='Контент', choices=Movies.MediaContent)
