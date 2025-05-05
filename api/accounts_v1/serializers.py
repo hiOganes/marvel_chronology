@@ -11,7 +11,6 @@ class SignUpSerializer(serializers.Serializer):
     password = serializers.CharField()
 
     def validate_email(self, value):
-        # Check email for uniqueness
         if get_user_model().objects.filter(email=value).exists():
             raise ValidationError("Такой E-mail уже существует!")
         return value

@@ -148,9 +148,10 @@ class DeleteMoviesView(PermissionRequiredMixin, View):
         return redirect('movies-list')
 
 
-class ViewedView(View):
+class ViewedView(PermissionRequiredMixin, View):
     model = Movies
     form_class = ViewedForm
+    permission_required = "movies.view_movies"
 
     def get(self, request, *args, **kwargs):
         full_path = request.get_full_path()
@@ -163,13 +164,13 @@ class ViewedView(View):
         finally:
             previous_page = request.META.get('HTTP_REFERER')
             if previous_page:
-                print(previous_page)
                 return redirect(previous_page)
             return redirect(request.GET.get('page', '/'))
 
 
-class DeleteOrCreateViewedView(View):
+class DeleteOrCreateViewedView(PermissionRequiredMixin, View):
     model = Movies
+    permission_required = "movies.view_movies"
 
     def get(self, request, *args, **kwargs):
         viewed_movies = request.user.viewed.all()

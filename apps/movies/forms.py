@@ -7,7 +7,7 @@ from apps.movies.models import Movies
 
 class MoviesForm(forms.Form):
     position = forms.IntegerField(label='Позиция')
-    title_ru = forms.CharField(label='Название на русском языке')
+    title_ru = forms.CharField(label='Название на русском языке', max_length=255)
     title_en = forms.CharField(label='Название на английском языке')
     release_date = forms.DateField(
         label='Дата выхода',

@@ -13,7 +13,7 @@ class Movies(models.Model):
         MOVIE = 'MOVIE', 'Фильм'
 
     position = models.IntegerField(verbose_name='Позиция', unique=True, )
-    title_ru = models.CharField(verbose_name='Название на русском', )
+    title_ru = models.CharField(verbose_name='Название на русском', max_length=255)
     title_en = models.CharField(verbose_name='Название на английском', )
     release_date = models.DateField(verbose_name='Дата выхода', )
     timing = models.IntegerField(verbose_name='Длительность', )

@@ -30,9 +30,9 @@
         {% if user.is_authenticated %}
          <div class="line_main" >
                  {% if viewed_movies_count %}
-                     <a class="line_button_left" href="{% url 'moview-deleteorcreate-viewed' %}">⨉</a>
+                     <a class="line_button_left" href="{% url 'movies-deleteorcreate-viewed' %}">⨉</a>
                  {% else %}
-                     <a class="line_button_left" href="{% url 'moview-deleteorcreate-viewed' %}">ВЫБРАТЬ ВСЕ</a>
+                     <a class="line_button_left" href="{% url 'movies-deleteorcreate-viewed' %}">ВЫБРАТЬ ВСЕ</a>
                  {% endif %}
                  <div style="display: flex; flex-grow: 10px; flex-shrink: 10px; flex-basis: 630px;">
                  {% for num in all_movies_count|custom_range %}

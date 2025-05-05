@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import pytest
 from django.test import Client
 from django.urls import reverse
@@ -15,52 +13,44 @@ from conftest import login_data
 @pytest.fixture
 def new_movie():
     data = {
-        'position': 1,
-        'title_ru': 'Фильм',
-        'title_en': 'Film',
-        'release_date': datetime.now(),
-        'timing': 100,
-        'director_id': Directors.objects.all()[0],
-        'trailer': 'https://www.youtube.com/watch?v=FxTlOl03x9c',
-        'description': 'description',
-        'poster': 'posters/2025/04/09/3840x.webp',
-        'content': 'MOVIE'
+        'first_name': 'first_name',
+        'last_name': 'last_name',
     }
     return data
 
 
 @pytest.mark.django_db()
-class TestCreateMoviesView:
+class TestCreateDirectorsView:
     client = Client()
     model = Movies
-    url = reverse('movies-create')
+    url = reverse('directors-create')
 
-    def test_create_movies_status_code_get(self):
+    def test_create_directors_status_code_get(self):
         response = self.client.get(self.url)
         assert response.status_code == status.HTTP_302_FOUND
 
-    def test_create_movies_status_code_post(self, new_movie):
+    def test_create_directors_status_code_post(self, new_movie):
         response = self.client.post(self.url, data=new_movie)
         assert response.status_code == status.HTTP_302_FOUND
 
-    def test_create_movies_status_code_get_user(self, login_data):
+    def test_create_directors_status_code_get_user(self, login_data):
         self.client.login(**login_data['user'])
         response = self.client.get(self.url)
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    def test_create_movies_status_code_post_user(self, new_movie, login_data):
+    def test_create_directors_status_code_post_user(self, new_movie, login_data):
         self.client.login(**login_data['user'])
         response = self.client.post(self.url, data=new_movie)
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    def test_create_movies_status_code_get_superuser(self, login_data):
+    def test_create_directors_status_code_get_superuser(self, login_data):
         self.client.login(**login_data['superuser'])
         response = self.client.get(self.url)
         assert response.status_code == status.HTTP_200_OK
 
-    def test_create_movies_status_code_post_superuser(self, new_movie,
+    def test_create_directors_status_code_post_superuser(self, new_movie,
                                                       login_data):
         self.client.login(**login_data['superuser'])
         response = self.client.post(self.url, data=new_movie)
-        assert response.status_code == status.HTTP_200_OK
+        assert response.status_code == status.HTTP_302_FOUND
 
