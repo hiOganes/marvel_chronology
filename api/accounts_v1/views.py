@@ -34,7 +34,8 @@ class SignUpAPIView(APIView):
         if serializer.is_valid():
             user = self.model(
                 username=serializer.validated_data['username'],
-                email=serializer.validated_data['email']
+                email=serializer.validated_data['email'],
+                is_active=True,
             )
             user.set_password(serializer.validated_data['password'])
             user.save()

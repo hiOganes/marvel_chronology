@@ -11,4 +11,4 @@ def check_password(value):
             if elem not in ascii_letters:
                 return False
             letters.append(elem)
-    return numbers and lettrs
+    return numbers and letters

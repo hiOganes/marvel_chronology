@@ -8,8 +8,7 @@ urlpatterns = [
         views.CreateDirectorsAPIView.as_view(),
         name='api-directors-create'
     ),
-    path(''
-         'delete/<slug:id>/',
+    path('delete/<slug:pk>/',
          views.DeleteDirectorsAPIView.as_view(),
          name='api-directors-delete'
          )

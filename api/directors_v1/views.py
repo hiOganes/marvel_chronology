@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAdminUser
 
 from apps.directors.models import Directors
 from api.directors_v1.serializers import DirectorsSerializer
@@ -15,6 +16,7 @@ tags=['Directors']
 class CreateDirectorsAPIView(APIView):
     model = Directors
     serializer_class = DirectorsSerializer
+    permission_classes = [IsAdminUser]
 
     @extend_schema(
         summary='This endpoint create a new director.',
@@ -40,6 +42,7 @@ class CreateDirectorsAPIView(APIView):
 
 class DeleteDirectorsAPIView(APIView):
     model = Directors
+    permission_classes = [IsAdminUser]
 
     @extend_schema(
         summary='This endpoint delete a director.',
@@ -49,6 +52,9 @@ class DeleteDirectorsAPIView(APIView):
         examples=schema_examples.DELETE_DIRECTORS_EXAMPLES,
     )
     def delete(self, request, *args, **kwargs):
-        director = get_object_or_404(self.model, pk=kwargs['pk'])
+        director = get_object_or_404(self.model, pk=kwargs.get('pk'))
         director.delete()
-        return Response(data={'result': 'Director has been deleted'})
+        return Response(
+            data={'result': 'Director has been deleted'},
+            status=status.HTTP_204_NO_CONTENT
+        )

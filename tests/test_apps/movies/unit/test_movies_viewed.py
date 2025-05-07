@@ -24,7 +24,7 @@ class TestViewedMoviesView:
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
     def test_viewed_movies_add(self, login_data):
-        self.client.login(**login_data['user'])
+        self.client.login(**login_data['superuser'])
         movie = self.model.objects.all()[0]
         viewed_before = movie.user_set.count()
         response = self.client.get(

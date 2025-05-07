@@ -1,5 +1,6 @@
 import pytest
 from django.core.management import call_command
+from django.contrib.auth.models import User, Group, Permission
 
 
 @pytest.fixture()

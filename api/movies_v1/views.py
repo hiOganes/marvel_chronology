@@ -43,7 +43,7 @@ class ListMoviesAPIView(APIView):
         responses=schema_examples.GET_LIST_MOVIES_STATUS_RESPONSES,
         examples=schema_examples.GET_LIST_MOVIES_EXAMPLES,
     )
-    def get(self, request):
+    def get(self, request, *args, **kwrgs):
         full_path = request.get_full_path()
         movies = self.get_objects(request.query_params.get('search'))
         cached_queryset = cache.get(full_path, None)
