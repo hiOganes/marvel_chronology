@@ -89,6 +89,7 @@ class DetailMoviesAPIView(APIView):
     permission_classes = [MoviesPermission]
 
     def get_object(self, *args, **kwargs):
+        print('GET_OBJECT', kwargs)
         return get_object_or_404(self.model, pk=kwargs['pk'])
 
     @extend_schema(
@@ -99,6 +100,7 @@ class DetailMoviesAPIView(APIView):
         examples=schema_examples.GET_DETAIL_MOVIES_EXAMPLES,
     )
     def get(self, request, *args, **kwargs):
+        print('GET', kwargs)
         movie = self.get_object(*args, **kwargs)
         serializer = self.serializer_class(movie)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
