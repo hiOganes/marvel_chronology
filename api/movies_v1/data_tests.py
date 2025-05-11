@@ -27,3 +27,12 @@ def new_movie():
         "poster": generete_image(),
         "content": Movies.MediaContent.MOVIE
     }
+
+
+update_movie = {
+        "position": 2,
+        "title_ru": "строка1",
+        "title_en": "string1",
+        "timing": 100,
+        "description": "string1",
+    }

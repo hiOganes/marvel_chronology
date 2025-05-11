@@ -8,7 +8,7 @@ from django.http import QueryDict
 from django.db import connection
 
 from api.movies_v1 import views
-from api.movies_v1.data_tests import new_movie
+from api.movies_v1.data_tests import new_movie, update_movie
 from apps.movies.models import Movies
 
 
@@ -79,10 +79,73 @@ class TestDetailMoviesAPIView(APITestCase):
         self.view = views.DetailMoviesAPIView.as_view()
         self.factory = APIRequestFactory()
 
-    def test_movies_detail(self):
+    def test_movies_get_movie(self):
         request = self.factory.get(self.url)
         response = self.view(request, pk=self.movie.pk)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_movies_update_movie_anonymous(self):
+        request = self.factory.patch(self.url, update_movie)
+        response = self.view(request, pk=self.movie.pk)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_movies_update_movie_user(self):
+        request = self.factory.patch(self.url, update_movie)
+        force_authenticate(request, self.user)
+        response = self.view(request, pk=self.movie.pk)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_movies_update_movie_superuser(self):
+        request = self.factory.patch(self.url, update_movie)
+        force_authenticate(request, self.superuser)
+        response = self.view(request, pk=self.movie.pk)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_movies_update_movie_invalid_data(self):
+        invalid_data = {'position': 'string'}
+        request = self.factory.patch(self.url, invalid_data)
+        force_authenticate(request, self.superuser)
+        response = self.view(request, pk=self.movie.pk)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_movies_update_movie_empty_data(self):
+        request = self.factory.patch(self.url, {'title_ru': ''})
+        force_authenticate(request, self.superuser)
+        response = self.view(request, pk=self.movie.pk)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_movies_delete_moive_anonymous(self):
+        amount_before = Movies.objects.count()
+        request = self.factory.delete(self.url)
+        response = self.view(request, pk=self.movie.pk)
+        amount_after = Movies.objects.count()
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertTrue(amount_before == amount_after)
+
+    def test_movies_delete_moive_user(self):
+        amount_before = Movies.objects.count()
+        request = self.factory.delete(self.url)
+        force_authenticate(request, self.user)
+        response = self.view(request, pk=self.movie.pk)
+        amount_after = Movies.objects.count()
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertTrue(amount_before == amount_after)
+
+    def test_movies_delete_moive_superuser(self):
+        amount_before = Movies.objects.count()
+        request = self.factory.delete(self.url)
+        force_authenticate(request, self.superuser)
+        response = self.view(request, pk=self.movie.pk)
+        amount_after = Movies.objects.count()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(amount_before > amount_after)
+
+    def test_movies_delete_movie_invalid_data(self):
+        amount_before = Movies.objects.count()
+        request = self.factory.delete(self.url)
+        force_authenticate(request, self.superuser)
+        response = self.view(request, pk=10**10)
+        amount_after = Movies.objects.count()
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertTrue(amount_before == amount_after)
 

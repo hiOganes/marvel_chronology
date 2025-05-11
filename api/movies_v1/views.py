@@ -70,8 +70,7 @@ class ListMoviesAPIView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            movie = self.model.objects.create(**serializer.validated_data)
-            serializer = self.serializer_class(movie)
+            serializer.save()
             return Response(
                 data=serializer.data,
                 status=status.HTTP_201_CREATED
@@ -89,7 +88,6 @@ class DetailMoviesAPIView(APIView):
     permission_classes = [MoviesPermission]
 
     def get_object(self, *args, **kwargs):
-        print('GET_OBJECT', kwargs)
         return get_object_or_404(self.model, pk=kwargs['pk'])
 
     @extend_schema(
@@ -100,7 +98,6 @@ class DetailMoviesAPIView(APIView):
         examples=schema_examples.GET_DETAIL_MOVIES_EXAMPLES,
     )
     def get(self, request, *args, **kwargs):
-        print('GET', kwargs)
         movie = self.get_object(*args, **kwargs)
         serializer = self.serializer_class(movie)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
@@ -112,15 +109,11 @@ class DetailMoviesAPIView(APIView):
         responses=schema_examples.PUT_DETAIL_MOVIES_STATUS_RESPONSES,
         examples=schema_examples.PUT_DETAIL_MOVIES_EXAMPLES,
     )
-    def put(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
         movie = self.get_object(*args, **kwargs)
-        serializer = self.serializer_class(data=request.data)
+        serializer = self.serializer_class(data=request.data, partial=True)
         if serializer.is_valid():
-            for key, value in serializer.validated_data.items():
-                if getattr(movie, key) != value:
-                    setattr(movie, key, value)
-            movie.save()
-            serializer = self.serializer_class(movie)
+            serializer.save()
             cache.clear()
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         return Response(
