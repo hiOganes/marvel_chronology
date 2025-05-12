@@ -150,15 +150,20 @@ class ViewedAPIView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            movie = self.model.objects.get(pk=serializer.validated_data['id'])
+            movie = get_object_or_404(
+                self.model, pk=serializer.validated_data['id']
+            )
             try:
                 request.user.viewed.get(id=movie.id)
                 request.user.viewed.remove(movie)
-                return Response(data='Movie removed')
+                return Response(
+                    data='Movie removed', status=status.HTTP_204_NO_CONTENT
+                )
             except self.model.DoesNotExist:
                 movie.user_set.add(request.user)
-            return Response(data='Movie status is changed')
+            return Response(
+                data='Movie status is changed', status=status.HTTP_200_OK
+            )
         return Response(
-            data=serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
+            data=serializer.errors, status=status.HTTP_400_BAD_REQUEST
         )

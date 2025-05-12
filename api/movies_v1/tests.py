@@ -149,3 +149,49 @@ class TestDetailMoviesAPIView(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertTrue(amount_before == amount_after)
 
+
+class TestViewedAPIView(APITestCase):
+    fixtures = ['db.json']
+
+    def setUp(self):
+        self.movie = Movies.objects.all()[0]
+        self.superuser = get_user_model().objects.filter(is_superuser=True)[0]
+        self.user = get_user_model().objects.filter(is_superuser=False)[0]
+        self.url = reverse('api-viewed-status')
+        self.view = views.ViewedAPIView.as_view()
+        self.factory = APIRequestFactory()
+
+    def test_movies_update_viewed_anonymous(self):
+        request = self.factory.post(self.url, data={'id': self.movie.pk})
+        response = self.view(request)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_movies_update_viewed_user(self):
+        request = self.factory.post(self.url, data={'id': self.movie.pk})
+        force_authenticate(request, self.user)
+        response = self.view(request)
+        self.assertIn(
+            response.status_code,
+            [status.HTTP_200_OK, status.HTTP_204_NO_CONTENT]
+        )
+
+    def test_movies_update_viewed_superuser(self):
+        request = self.factory.post(self.url, data={'id': self.movie.pk})
+        force_authenticate(request, self.superuser)
+        response = self.view(request)
+        self.assertIn(
+            response.status_code,
+            [status.HTTP_200_OK, status.HTTP_204_NO_CONTENT]
+        )
+
+    def test_movies_update_viewed_invalid_data(self):
+        request = self.factory.post(self.url, data={'id': 10**10})
+        force_authenticate(request, self.superuser)
+        response = self.view(request)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_movies_update_viewed_empty_data(self):
+        request = self.factory.post(self.url, data={})
+        force_authenticate(request, self.superuser)
+        response = self.view(request)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
