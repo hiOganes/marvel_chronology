@@ -199,7 +199,7 @@ class TestUpdateMoviesView(TestCase):
         self.client = Client()
         self.model = Movies
         self.movie = self.model.objects.all()[0]
-        self.url = reverse('movies-delete', kwargs={'pk': self.movie.pk})
+        self.url = reverse('movies-update', kwargs={'pk': self.movie.pk})
         self.superuser = get_user_model().objects.filter(is_superuser=True)[0]
         self.user = get_user_model().objects.filter(is_superuser=False)[0]
 
@@ -230,3 +230,33 @@ class TestUpdateMoviesView(TestCase):
         self.client.force_login(self.superuser)
         response = self.client.post(self.url, data=update_movie)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+# class TestViewedMoviesView(TestCase):
+#     fixtures = ['db.json']
+#
+#     def setUp(self):
+#         self.client = Client()
+#         self.model = Movies
+#         self.movie = self.model.objects.all()[0]
+#         self.url = reverse('movies-viewed', kwargs={'pk': self.movie.pk})
+#         self.superuser = get_user_model().objects.filter(is_superuser=True)[0]
+#         self.user = get_user_model().objects.filter(is_superuser=False)[0]
+#
+#     def test_viewed_movies_status_code(self):
+#         self.client.force_login(self.superuser)
+#         response = self.client.get(self.url)
+#         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+#
+#     def test_viewed_movies_add(self):
+#         self.client.force_login(self.superuser)
+#         viewed_before = self.superuser.viewed.count()
+#         print(viewed_before)
+#         response = self.client.get(self.url)
+#         viewed_after = self.superuser.viewed.count()
+#         print(viewed_after)
+#         self.assertTrue(viewed_before < viewed_after)
+#         response = self.client.get(self.url)
+#         viewed_after = self.user.viewed.count()
+#         self.assertEqual(viewed_before, viewed_after)
+
