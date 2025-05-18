@@ -43,22 +43,15 @@ class TestSignUpView(TestCase):
         self.assertTrue(amount_users_before < amount_users_after)
 
 
-class TestSignInView(TestCase):
+class TestPasswordResetView(TestCase):
     fixtures = ['db.json']
 
     def setUp(self):
         self.client = Client()
-        self.url = reverse('signup')
+        self.url = reverse('password_reset')
         self.user = get_user_model().objects.all()[0]
 
-    def test_user_regiser_form(self):
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTemplateUsed(response, 'registration/signup.html')
-
-    def test_user_register(self):
-        amount_users_before = get_user_model().objects.count()
-        response = self.client.post(self.url, data=user_sign_up)
-        amount_users_after = get_user_model().objects.count()
+    def test_send_reset_email(self):
+        response = self.client.post(self.url, data={'email': self.user.email})
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
-        self.assertTrue(amount_users_before < amount_users_after)
+        self.assertTemplateUsed('password_reset_done.html')
