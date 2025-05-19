@@ -29,7 +29,7 @@ from rest_framework_simplejwt.views import (
 )
 
 from apps.movies.sitemaps import MoviesSitemap
-from api.accounts_v1 import views
+from api.accounts_api import views
 
 
 sitemaps = {
@@ -48,9 +48,9 @@ urlpatterns = [
         {'sitemaps': sitemaps},
         name='django.contrib.sitemaps.views.sitemap'
     ),
-    path('api/movies_v1/', include('api.movies_v1.urls')),
-    path('api/directors_v1/', include('api.directors_v1.urls')),
-    path('api/accounts_v1/', include('api.accounts_v1.urls')),
+    path('api/movies_api/', include('api.movies_api.urls')),
+    path('api/directors_api/', include('api.directors_api.urls')),
+    path('api/accounts_api/', include('api.accounts_api.urls')),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     # Optional UI:
     path(

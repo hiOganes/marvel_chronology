@@ -5,7 +5,7 @@ from rest_framework import status
 from django.contrib.auth import get_user_model
 
 from apps.directors.models import Directors
-from api.directors_v1.data_tests import new_director
+from api.directors_api.data_tests import new_director
 
 
 class TestCreateDirectorsView(TestCase):

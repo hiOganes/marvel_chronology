@@ -51,9 +51,9 @@ INSTALLED_APPS = [
     'apps.directors.apps.DirectorsConfig',
     'apps.accounts.apps.AccountsConfig',
     # Api apps
-    'api.movies_v1.apps.MoviesConfig',
-    'api.directors_v1.apps.DirectorsConfig',
-    'api.accounts_v1.apps.AccountsConfig',
+    'api.movies_api.apps.MoviesConfig',
+    'api.directors_api.apps.DirectorsConfig',
+    'api.accounts_api.apps.AccountsConfig',
     # Api
     'rest_framework',
     'drf_spectacular',

@@ -49,7 +49,7 @@
 
 2. Create and activate a virtual environment
     ```
-    python -m venv venv
+    python -m venv .venv
    
     source venv/bin/activate # for linux
     venv\Scripts\activate # for Windows
@@ -108,7 +108,7 @@
 ## Testing
 
  ```
-   python manage.py loaddata fixtures/db_orders.json # Loading data into the database
+   python manage.py dumpdata --exclude auth.permission --exclude contenttypes > db.json # Loading data into the database
    
    python manage.py test # Run tests
    ```

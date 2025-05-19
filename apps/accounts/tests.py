@@ -5,7 +5,7 @@ from rest_framework import status
 from django.contrib.auth import get_user_model
 
 from apps.movies.models import Movies
-from api.movies_v1.data_tests import new_movie, update_movie
+from api.movies_api.data_tests import new_movie, update_movie
 from apps.accounts.data_tests import user_sign_up, user_sign_in, user_invalid
 
 
