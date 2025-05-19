@@ -1,6 +1,29 @@
-# Order management
+# MARVEL Chronology
 
-Web application for managing orders in a cafe
+Этот проект представляет собой веб-приложение, созданное для любителей комиксов Marvel, позволяющее пользователям удобно отслеживать и просматривать фильмы и сериалы в правильной хронологической последовательности. Приложение помогает пользователям определить порядок, в котором они должны смотреть различные произведения Marvel, и предоставляет функции для управления списком просмотренных фильмов.
+
+#### Основные функции:
+
+- Хронология фильмов и сериалов Marvel: Пользователи могут ознакомиться с полным списком фильмов и сериалов Marvel, отслеживая правильный порядок их просмотра.
+- Регистрация и аутентификация: Пользователи могут зарегистрироваться и входить в систему, а также восстанавливать пароли через электронную почту, что обеспечивает безопасность и доступность аккаунтов.
+- Отметки просмотренных фильмов: Удобная функция для отметки фильмов и сериалов, которые пользователь уже посмотрел. Это позволяет эффективно контролировать прогресс просмотра.
+- Шкала прогресса: Пользователи могут видеть свою шкалу прогресса, что делает процесс просмотра более наглядным и интересным.
+
+#### Технологии и решения:
+
+1. Кэширование с помощью Redis: Запрашиваемые данные кэшируются для быстрого доступа. При добавлении нового элемента весь кэш обновляется, что позволяет сразу видеть изменения на сайте. Также предусмотрены механизмы для обновления кэша при удалении и изменении данных.
+
+2. TrigramSimilarity: Реализован поиск по названиям фильмов с использованием триграммного сравнения, что позволяет пользователям находить фильмы по частичному совпадению.
+
+3. Панель администратора: Организована структура записей с возможностью поиска, что позволяет администраторам управлять данными о фильмах и пользователях.
+
+4. OpenAPI и Redoc: Использованы для документирования API, что упрощает взаимодействие с ним и его использование сторонними разработчиками.
+
+5. Покрытие кода тестами: Все функции приложения покрыты тестами на 100%, что обеспечивает высокое качество кода и снижает вероятность ошибок.
+
+6. Sitemap: Создана карта сайта для улучшения SEO, что позволяет поисковым системам качественно индексировать страницы вашего сайта.
+
+7. Индексы: Установлены индексы на поля с русскими и английскими названиями фильмов, что значительно ускоряет поиск и фильтрацию записей.
 
 ## Table of Contents
 
@@ -12,10 +35,10 @@ Web application for managing orders in a cafe
 
 ## Technologies
 
-- Python 3.13.0
-- Django 5.1.3
+- Python 3.12.3
+- Django 5.1.7
 - PostgreSQL 17.0
-- HTML
+- Redis 7.0.15
 
 ## Installation
 
@@ -27,6 +50,7 @@ Web application for managing orders in a cafe
 2. Create and activate a virtual environment
     ```
     python -m venv venv
+   
     source venv/bin/activate # for linux
     venv\Scripts\activate # for Windows
     ```
@@ -35,30 +59,33 @@ Web application for managing orders in a cafe
     ```
     pip install -r requirements.txt
     ```
-   
+
 4. Get secret key to save to `.env` file
     ```
     python manage.py shell
    
     from django.core.management.utils import get_random_secret_key
+   
     get_random_secret_key()
-
     ```
 
 5. Create a `.env` file and configure environment variables
     ```
    # Main
-    DEBUG = True
-    SECRET_KEY = 'your-secret-key'
-    ALLOWED_HOSTS = []
+    DEBUG=True
+    SECRET_KEY='your-secret-key'
+    ALLOWED_HOSTS=[]
    
    # PastgreSQL
-    ENGINE = "django.db.backends.postgresql"
-    NAME = "your_db-name"
-    USER = "your_user_db-name"
-    PASSWORD = "your_user_db-password"
-    HOST = "localhost"
-    PORT = "5432"
+    DB_NAME="your_db-name"
+    DB_USER="your_user_db-name"
+    DB_PASSWORD="your_user_db-password"
+    DB_HOST="your_host_name"
+    DB_PORT="port_psql"
+   
+   # Send Email
+    EMAIL_HOST_USER="your email"
+    EMAIL_HOST_PASSWORD="your password"
     ```
 
 ## Configuration
@@ -75,12 +102,13 @@ Web application for managing orders in a cafe
     python manage.py runserver
     ```
 
-2. Open your browser and go to [Website](http://127.0.0.1:8000/orders/create/)
+2. Open your browser and go to [Website](http://127.0.0.1:8000/movies/list/)
 3. Open your browser and go to [OpenAPI](http://127.0.0.1:8000/api/schema/swagger-ui/)
 
 ## Testing
 
  ```
    python manage.py loaddata fixtures/db_orders.json # Loading data into the database
+   
    python manage.py test # Run tests
    ```
